@@ -159,6 +159,43 @@ func (s *stringMapValue) IsCumulative() bool {
 	return true
 }
 
+// -- map[string]string Value
+type stringMapIface map[string]interface{}
+
+func newStringMapIface(p *map[string]interface{}) *stringMapIface {
+	return (*stringMapIface)(p)
+}
+
+func (s *stringMapIface) Set(value string) error {
+	parts := stringMapRegex.Split(value, 2)
+	if len(parts) != 2 {
+		return fmt.Errorf("expected KEY=VALUE got '%s'", value)
+	}
+
+	switch parts[1] {
+	case "true":
+		(*s)[parts[0]] = true
+	case "false":
+		(*s)[parts[0]] = false
+	default:
+		(*s)[parts[0]] = parts[1]
+	}
+
+	return nil
+}
+
+func (s *stringMapIface) Get() interface{} {
+	return (map[string]interface{})(*s)
+}
+
+func (s *stringMapIface) String() string {
+	return fmt.Sprintf("%s", map[string]interface{}(*s))
+}
+
+func (s *stringMapIface) IsCumulative() bool {
+	return true
+}
+
 // -- net.IP Value
 type ipValue net.IP
 

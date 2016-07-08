@@ -29,6 +29,13 @@ func (p *parserMixin) StringMap() (target *map[string]string) {
 	return
 }
 
+// StringMap provides key=value parsing into a map.
+func (p *parserMixin) StringMapIface() (target *map[string]interface{}) {
+	target = &(map[string]interface{}{})
+	p.SetValue(newStringMapIface(target))
+	return
+}
+
 // Duration sets the parser to a time.Duration parser.
 func (p *parserMixin) Duration() (target *time.Duration) {
 	target = new(time.Duration)
